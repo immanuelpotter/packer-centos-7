@@ -22,6 +22,8 @@ The following software must be installed/present on your local machine before yo
   - [VirtualBox](https://www.virtualbox.org/) (if you want to build the VirtualBox box)
   - [Ansible](http://docs.ansible.com/intro_installation.html)
 
+The ansible provisioner in packer makes use of some pre-made roles by geerlingguy; these make the raw .iso used compatible with vagrant by installing the dependencies for VBox Guest Additions and similar.
+
 ## Usage
 
 Make sure all the required software (listed above) is installed, then cd to the directory containing this README.md file, and run:

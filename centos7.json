@@ -6,14 +6,38 @@
       "script": "scripts/ansible.sh"
     },
     {
+      "type": "file",
+      "source": "scripts/harden.tar.gz",
+      "destination": "/tmp/harden.tar.gz"
+    },
+    {
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
       "galaxy_file": "requirements.yml"
     },
     {
+      "inline": [
+        "cp /tmp/harden.tar.gz /root && cd /root && tar xvf harden.tar.gz && cd harden/ && ./main.sh"
+      ],
+      "type":"shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+    },
+    {
+      "type": "file",
+      "source": "scripts/harden/get_me_back_in.sh",
+      "destination": "/tmp/get_me_back_in.sh"
+    },
+    {
+      "inline": [
+        "cp /tmp/get_me_back_in.sh /root && cd /root && chmod +x get_me_back_in.sh && ./get_me_back_in.sh"
+      ],
+      "type":"shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+    },
+    {
       "type": "shell",
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/cleanup.sh"
+      "script": "scripts/cleanup.sh",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
     }
   ],
   "builders": [
@@ -23,6 +47,7 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
+      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
       "disk_size": 81920,
       "guest_os_type": "RedHat_64",
       "headless": true,
@@ -37,7 +62,6 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
       "vm_name": "packer-centos-7-x86_64",

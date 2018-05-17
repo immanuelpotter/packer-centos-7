@@ -11,34 +11,34 @@
 # Notes:    Post-hardening report can be found in same dir as this script, called hardening-report.txt
 #
 
-. scripts/harden/variables.env
+. ./variables.env
 
-. scripts/harden/issue.sh
-. scripts/harden/fs_types.sh
-. scripts/harden/partition_checks.sh
-. scripts/harden/properties_check.sh
-. scripts/harden/sticky_bit_check.sh
-. scripts/harden/systemctl_disabling.sh
-. scripts/harden/ensure_gpg_configured.sh
-. scripts/harden/yum_gpg_check.sh
-. scripts/harden/aide_install.sh
-. scripts/harden/grub_passwd.sh
-. scripts/harden/single_user_auth.sh
-. scripts/harden/restrict_kernel_parameters.sh
-. scripts/harden/update_motd.sh
-. scripts/harden/check_NX_enabled.sh
-. scripts/harden/prelink_removal.sh
-. scripts/harden/stat_file_and_remediate.sh
-. scripts/harden/disable_services.sh
-. scripts/harden/grep_check.sh
-. scripts/harden/wireless_ifs_down.sh
-. scripts/harden/pam_configuration.sh
-. scripts/harden/login_defs.sh
-. scripts/harden/nologin_sysaccounts.sh
-. scripts/harden/finds.sh
-. scripts/harden/etc_shadow_lock.sh
-. scripts/harden/legacy_plus_entries.sh
-. scripts/harden/further_uid_and_passwd_checks.sh
+. ./issue.sh
+. ./fs_types.sh
+. ./partition_checks.sh
+. ./properties_check.sh
+. ./sticky_bit_check.sh
+. ./systemctl_disabling.sh
+. ./ensure_gpg_configured.sh
+. ./yum_gpg_check.sh
+. ./aide_install.sh
+. ./grub_passwd.sh
+. ./single_user_auth.sh
+. ./restrict_kernel_parameters.sh
+. ./update_motd.sh
+. ./check_NX_enabled.sh
+. ./prelink_removal.sh
+. ./stat_file_and_remediate.sh
+. ./disable_services.sh
+. ./grep_check.sh
+. ./wireless_ifs_down.sh
+. ./pam_configuration.sh
+. ./login_defs.sh
+. ./nologin_sysaccounts.sh
+. ./finds.sh
+. ./etc_shadow_lock.sh
+. ./legacy_plus_entries.sh
+. ./further_uid_and_passwd_checks.sh
 
 yum_installations(){
   yum update -y
@@ -344,6 +344,7 @@ main(){
   yum_removals
   restart_services_main
   verify_system
+  ansible-playbook -i ./ansible/hosts ./ansible/fstab.yml
   echo "Scripts finished."
   echo "Please check hardening_report.txt" 
 }

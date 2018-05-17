@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--ioapic", "on"]
     end
 
-    config.vm.provision "shell", inline: "echo Hello, World"
+#    config.vm.provision "shell", inline: "cd /vagrant/scripts/harden && chmod +x main.sh get_me_back_in.sh && ./main.sh && ./get_me_back_in.sh && ansible-playbook -i ansible/hosts ansible/fstab.yml"
   end
 
 end

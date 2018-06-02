@@ -13,6 +13,8 @@ The example can be modified to use more Ansible roles, plays, and included playb
 
 This has been designed to test out new additions to a security-hardened base build of CentOS 7, to better reflect what could be used in real environments.
 
+NB: LUKS password has to be supplied in plaintext (in http/ks.cfg), but this would be changed in a real deployment (either by crypsetup or other means)
+
 ## Requirements
 
 The following software must be installed/present on your local machine before you can use Packer to build the Vagrant box file:

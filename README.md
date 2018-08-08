@@ -38,6 +38,13 @@ There's an included Vagrantfile that allows quick testing of the built Vagrant b
 
     $ vagrant up
 
+## AWS AMI Builder
+variables.json currently uses envvars to pass the keys in. Set these in your environment before using this file with your aws builds.
+
+## Using only one provisioner
+To just build an AMI: packer build centos7.json -only=amazon-ebs
+To just build a vbox box: packer build centos7.json -only=virtualbox-iso
+
 ## License
 
 MIT license.

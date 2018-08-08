@@ -13,9 +13,11 @@ The example can be modified to use more Ansible roles, plays, and included playb
 
 This has been designed to test out new additions to a security-hardened base build of CentOS 7, to better reflect what could be used in real environments.
 
-NB: LUKS password has to be supplied in plaintext (in http/ks.cfg), but this would be changed in a real deployment (either by crypsetup or other means)
+By default, the virtualbox builder will create a 20GB sized image; and Amaon's, a standard EBS volume (10GB).
 
-## Requirements
+NB: LUKS password has to be supplied in plaintext (in http/ks.cfg), but this would be changed in a real deployment (either by cryptsetup or other means)
+
+### Requirements
 
 The following software must be installed/present on your local machine before you can use Packer to build the Vagrant box file:
 
@@ -28,6 +30,15 @@ The ansible provisioner in packer makes use of some pre-made roles by geerlinggu
 
 ## Usage
 
+## AWS AMI Builder
+variables.json currently uses envvars to pass the keys in. Set these in your environment before using this file with your aws builds.
+
+## Using only one provisioner
+To just build an AMI: packer build -only=amazon-ebs centos7.json -only=amazon-ebs
+To just build a vbox box: packer build -only=virtualbox-iso centos7.json
+
+To build an AMI AND a virtualbox .box:
+
 Make sure all the required software (listed above) is installed.
 Package up the hardening scripts:
 
@@ -37,20 +48,13 @@ and then cd to the directory containing this README.md file, and run:
 
     $ packer build centos7.json
 
-After a few minutes, Packer should tell you the box was generated successfully.
+After a few minutes, Packer should tell you that both boxes were generated successfully.
 
 ## Testing built boxes
 
 There's an included Vagrantfile that allows quick testing of the built Vagrant boxes. From this same directory, run one the following command after building the box:
 
     $ vagrant up
-
-## AWS AMI Builder
-variables.json currently uses envvars to pass the keys in. Set these in your environment before using this file with your aws builds.
-
-## Using only one provisioner
-To just build an AMI: packer build -only=amazon-ebs centos7.json -only=amazon-ebs
-To just build a vbox box: packer build -only=virtualbox-iso centos7.json
 
 ## License
 

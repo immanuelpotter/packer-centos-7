@@ -48,7 +48,7 @@
       ],
       "boot_wait": "10s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
-      "disk_size": 81920,
+      "disk_size": 20000,
       "guest_os_type": "RedHat_64",
       "headless": true,
       "http_directory": "http",

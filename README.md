@@ -28,7 +28,12 @@ The ansible provisioner in packer makes use of some pre-made roles by geerlinggu
 
 ## Usage
 
-Make sure all the required software (listed above) is installed, then cd to the directory containing this README.md file, and run:
+Make sure all the required software (listed above) is installed.
+Package up the hardening scripts:
+
+    $ cd scripts/ && tar cvzf harden.tar.gz harden
+
+and then cd to the directory containing this README.md file, and run:
 
     $ packer build centos7.json
 
@@ -44,8 +49,8 @@ There's an included Vagrantfile that allows quick testing of the built Vagrant b
 variables.json currently uses envvars to pass the keys in. Set these in your environment before using this file with your aws builds.
 
 ## Using only one provisioner
-To just build an AMI: packer build centos7.json -only=amazon-ebs
-To just build a vbox box: packer build centos7.json -only=virtualbox-iso
+To just build an AMI: packer build -only=amazon-ebs centos7.json -only=amazon-ebs
+To just build a vbox box: packer build -only=virtualbox-iso centos7.json
 
 ## License
 

@@ -1,0 +1,3 @@
+[submodule "scripts/harden"]
+	path = scripts/harden
+	url = https://github.com/immanuelpotter/harden

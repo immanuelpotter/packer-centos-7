@@ -38,6 +38,10 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
     },
     {
+      "type": "ansible-local",
+      "playbook_file": "/tmp/ansible/main.yml"
+    },
+    {
       "type": "shell",
       "script": "scripts/cleanup.sh",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"

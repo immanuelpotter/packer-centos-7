@@ -13,8 +13,6 @@ The example can be modified to use more Ansible roles, plays, and included playb
 
 This has been designed to test out new additions to a security-hardened base build of CentOS 7, to better reflect what could be used in real environments.
 
-By default, the virtualbox builder will create a 20GB sized image; and Amaon's, a standard EBS volume (10GB).
-
 NB: LUKS password has to be supplied in plaintext (in http/ks.cfg), but this would be changed in a real deployment (either by cryptsetup or other means)
 
 ### Requirements
@@ -26,18 +24,30 @@ The following software must be installed/present on your local machine before yo
   - [VirtualBox](https://www.virtualbox.org/) (if you want to build the VirtualBox box)
   - [Ansible](http://docs.ansible.com/intro_installation.html)
 
+And for AWS, the AWS CLI:
+
+  - [AWS CLI](pip install awscli)
+
+If building AMIs, from an ISO, you should create an IAM Role called "vmimport" (you can specify otherwise in the packer template). You can do this by, from the root of this repo::
+
+	aws iam create-role --role-name vmimport --assume-role-policy-document file://aws-iam-policies/trust-policy.json
+
+Now edit the aws-iam-policies/role-policy.json file with your bucket name (specified in centos7-ami.json), and add this to the role:
+
+	aws iam put-role-policy --role-name vmimport --policy-name vmimport --policy-document file://aws-iam-policies/role-policy.json
+
 The ansible provisioner in packer makes use of some pre-made roles by geerlingguy; these make the raw .iso used compatible with vagrant by installing the dependencies for VBox Guest Additions and similar.
 
 ## Usage
 
-## AWS AMI Builder
-variables.json currently uses envvars to pass the keys in. Set these in your environment before using this file with your aws builds.
+To build an AMI (From a minimal ISO), you must build a vbox box, then import to Amazon. This is why there is a separate json file, to prevent clogging up your disk.
+You will need to set your environment variables: $AWS_ACCESS_KEY, $AWS_SECRET_KEY, and $BUCKET_NAME.
 
-## Using only one provisioner
-To just build an AMI: packer build -only=amazon-ebs centos7.json -only=amazon-ebs
-To just build a vbox box: packer build -only=virtualbox-iso centos7.json
+     packer build centos7-ami.json
 
-To build an AMI AND a virtualbox .box:
+To just build a vbox box, don't worry about those env vars:
+
+    packer build centos7-vagrant.json
 
 Make sure all the required software (listed above) is installed.
 Package up the hardening scripts:

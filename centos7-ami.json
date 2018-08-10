@@ -1,4 +1,11 @@
 {
+  "variables": {
+     "TMPDIR": "{{env `HOME`}}", 
+     "AWS_ACCESS_KEY": "{{env `AWS_ACCESS_KEY`}}",
+     "AWS_SECRET_KEY": "{{env `AWS_SECRET_KEY`}}",
+     "BUCKET_NAME": "{{env `BUCKET_NAME`}}"
+     
+  },
   "provisioners": [
     {
       "type": "shell",
@@ -48,14 +55,15 @@
       ],
       "boot_wait": "10s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
-      "disk_size": 20000,
+      "disk_size": 11000,
       "guest_os_type": "RedHat_64",
       "headless": true,
-      "http_directory": "http",
+      "http_directory": "http", 
       "iso_urls": [
         "CentOS-7-x86_64-Minimal-1804.iso",
         "http://mirrors.mit.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso"
       ],
+      "output_directory": "output-ami-builder",
       "iso_checksum_type": "sha256",
       "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
       "ssh_username": "vagrant",
@@ -64,7 +72,8 @@
       "ssh_wait_timeout": "10000s",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "packer-centos-7-x86_64",
+      "vm_name": "packer-centos-7-hardened-ami-base-vbox-x86_64",
+      "format": "ova",
       "vboxmanage": [
         [
           "modifyvm",
@@ -79,23 +88,20 @@
           "2"
         ]
       ]
-    },
-    {
-      "type": "amazon-ebs",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
-      "region": "eu-west-2",
-      "skip_region_validation": "true",
-      "source_ami": "ami-11352675",
-      "instance_type": "t2.micro",
-      "ssh_username": "ec2-user",
-      "ami_name": "packer-centos-hardened {{timestamp}}"
     }
   ],
   "post-processors": [
     {
-      "output": "builds/{{.Provider}}-centos7.box",
-      "type": "vagrant"
+      "type": "amazon-import",
+      "access_key": "{{user `AWS_ACCESS_KEY`}}",
+      "secret_key": "{{user `AWS_SECRET_KEY`}}",
+      "region": "eu-west-2",
+      "s3_bucket_name": "{{user `BUCKET_NAME`}}",
+      "license_type": "BYOL",
+      "ami_name": "Packer-centos-7-hardened",
+      "tags": {
+        "Description": "Hardened CentOS 7 Packer Amazon Import"
+      }
     }
   ]
 }

@@ -26,7 +26,7 @@ The following software must be installed/present on your local machine before yo
 
 And for AWS, the AWS CLI:
 
-  - [AWS CLI](pip install awscli)
+	pip install awscli
 
 If building AMIs, from an ISO, you should create an IAM Role called "vmimport" (you can specify otherwise in the packer template). You can do this by, from the root of this repo::
 
@@ -42,6 +42,7 @@ The ansible provisioner in packer makes use of some pre-made roles by geerlinggu
 
 To build an AMI (From a minimal ISO), you must build a vbox box, then import to Amazon. This is why there is a separate json file, to prevent clogging up your disk.
 You will need to set your environment variables: $AWS_ACCESS_KEY, $AWS_SECRET_KEY, and $BUCKET_NAME.
+I'm currently also overriding $AWS_MAX_ATTEMPTS and $AWS_POLL_DELAY_SECONDS on the machine running the packer build, as the import in Amazon takes bloody ages. The defaults are 300 attempts on a 5 second delay. I've overridden this to 2000 attempts on an 8 second delay.
 
      packer build centos7-ami.json
 

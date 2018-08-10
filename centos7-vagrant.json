@@ -39,7 +39,8 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "/tmp/ansible/main.yml"
+      "playbook_file": "scripts/harden/ansible/fstab.yml",
+      "inventory_file": "scripts/harden/ansible/hosts"
     },
     {
       "type": "shell",
